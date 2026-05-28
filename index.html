@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>פתרונות AI לארגונים ולמחלקות כספים</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-soft: #11141b;
+      --panel: #171b23;
+      --panel-2: #1b2029;
+      --panel-3: #202632;
+      --text: #f5f7fb;
+      --text-soft: #b8c0cc;
+      --muted: #8a93a3;
+      --line: #2a3140;
+      --line-soft: #232937;
+      --accent: #c7d36f;
+      --accent-soft: #d9e58a;
+      --accent-border: rgba(199,211,111,.45);
+      --shadow: 0 24px 60px rgba(0,0,0,.38);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Heebo, Assistant, Segoe UI, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(199,211,111,.05), transparent 20%),
+        radial-gradient(circle at bottom left, rgba(255,255,255,.03), transparent 24%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+    }
+    a { color: inherit; text-decoration: none; }
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(10px);
+      background: rgba(11,13,18,.88);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .top-header-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-mark {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(199,211,111,.12);
+      flex: 0 0 auto;
+    }
+    .brand-text strong {
+      display: block;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .brand-text span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.2;
+    }
+    .header-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-border);
+      background: linear-gradient(180deg, rgba(199,211,111,.10), rgba(255,255,255,.02));
+      color: var(--accent-soft);
+      font-size: 13px;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+    .header-link:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+    .layout {
+      display: flex;
+      flex-direction: row-reverse;
+      min-height: calc(100vh - 64px);
+    }
+    .sidebar {
+      width: 310px;
+      position: sticky;
+      top: 65px;
+      height: calc(100vh - 65px);
+      padding: 24px 18px;
+      overflow: auto;
+      background: rgba(11,13,18,.92);
+      border-left: 1px solid var(--line-soft);
+      backdrop-filter: blur(10px);
+    }
+    .side-box,
+    .nav-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+    .side-kicker,
+    .kicker,
+    .series,
+    .nav-title,
+    .eyebrow,
+    .section-label {
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .side-box h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.15;
+    }
+    .side-box p {
+      margin: 12px 0 0;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+    .nav-title {
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .nav a {
+      display: block;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px 14px;
+      transition: .2s ease;
+    }
+    .nav a:hover {
+      border-color: var(--accent-border);
+      background: linear-gradient(180deg, rgba(199,211,111,.08), rgba(255,255,255,.02));
+      transform: translateX(-2px);
+    }
+    .nav a strong {
+      display: block;
+      color: var(--text);
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+    .nav a span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .content {
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 28px 60px;
+    }
+    .top-strip {
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+      margin-bottom: 26px;
+      padding: 18px 0;
+    }
+    .top-strip-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .mini-tabs {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .mini-tab {
+      min-width: 210px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px 16px;
+      color: var(--text-soft);
+    }
+    .mini-tab.active {
+      border-color: var(--accent-border);
+      background: linear-gradient(180deg, rgba(199,211,111,.10), rgba(255,255,255,.02));
+      box-shadow: 0 0 0 1px rgba(199,211,111,.15) inset;
+    }
+    .mini-tab .small {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .mini-tab strong {
+      display: block;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .hero {
+      padding: 72px 0 60px;
+      text-align: right;
+      border-bottom: 1px solid var(--line-soft);
+      margin-bottom: 26px;
+    }
+    .hero h2 {
+      margin: 0 0 18px;
+      font-size: 64px;
+      line-height: 1.02;
+      font-weight: 800;
+      max-width: 900px;
+    }
+    .hero h2 .accent { color: var(--accent); }
+    .hero p {
+      margin: 0;
+      max-width: 880px;
+      font-size: 22px;
+      color: var(--text-soft);
+    }
+    .hero-list {
+      margin-top: 28px;
+      max-width: 920px;
+      color: var(--text-soft);
+      font-size: 18px;
+      padding-right: 20px;
+    }
+    .hero-list li { margin-bottom: 8px; }
+    .section {
+      scroll-margin-top: 90px;
+      margin: 22px 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .section h3 {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.15;
+    }
+    .section-summary {
+      max-width: 380px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .lead {
+      font-size: 19px;
+      color: var(--text-soft);
+      margin: 0 0 20px;
+    }
+    .grid,
+    .two-col {
+      display: grid;
+      gap: 18px;
+    }
+    .grid { grid-template-columns: 1.1fr .9fr; }
+    .two-col { grid-template-columns: 1fr 1fr; }
+    .card {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px;
+    }
+    .card.soft {
+      background: linear-gradient(180deg, rgba(255,255,255,.015), rgba(255,255,255,.03));
+    }
+    .card.accent {
+      background: linear-gradient(180deg, rgba(199,211,111,.10), rgba(255,255,255,.02));
+      border-color: var(--accent-border);
+    }
+    .card h4 {
+      margin: 0 0 12px;
+      font-size: 21px;
+      color: var(--text);
+    }
+    .points {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .points li {
+      background: var(--panel-3);
+      border: 1px solid #2d3544;
+      border-radius: 16px;
+      padding: 12px 14px;
+      color: var(--text-soft);
+    }
+    .points strong { color: var(--text); }
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 12px;
+    }
+    .step {
+      position: relative;
+      padding: 14px 16px 14px 58px;
+      background: var(--panel-3);
+      border: 1px solid #313949;
+      border-radius: 18px;
+      color: var(--text-soft);
+    }
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      box-shadow: 0 8px 18px rgba(199,211,111,.18);
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(199,211,111,.10);
+      color: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .footer-box {
+      margin-top: 28px;
+      background: linear-gradient(180deg, rgba(199,211,111,.10), rgba(255,255,255,.02));
+      border: 1px solid var(--accent-border);
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+    .footer-box h3 {
+      margin: 0 0 10px;
+      font-size: 28px;
+    }
+    .footer-box p {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 17px;
+    }
+    #footer { padding: 5rem 0 3rem; }
+    .inner { max-width: 1200px; margin: 0 auto; }
+    .footer-title { font-size: clamp(1.3rem, 2.5vw, 1.8rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .footer-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 2.5rem; }
+    .footer-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    @media (min-width: 500px) { .footer-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 900px) { .footer-grid { grid-template-columns: repeat(3, 1fr); } }
+    .footer-card {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.3rem 1.5rem;
+      transition: border-color 0.2s, transform 0.22s;
+      display: block;
+    }
+    .footer-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .footer-card-num { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 0.4rem; }
+    .footer-card-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .footer-card-desc { font-size: 0.78rem; color: var(--text-soft); line-height: 1.5; margin-bottom: 0.5rem; }
+    .footer-card-link { font-size: 0.72rem; color: var(--accent); letter-spacing: 0.03em; }
+    .footer-copy { margin-top: 3rem; text-align: center; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.05em; }
+    @media (max-width: 1100px) {
+      .layout { display: block; }
+      .sidebar {
+        position: relative;
+        top: 0;
+        width: auto;
+        height: auto;
+        border-left: none;
+        border-bottom: 1px solid var(--line-soft);
+      }
+      .content { padding: 18px; }
+      .grid, .two-col { grid-template-columns: 1fr; }
+      .hero { padding: 42px 0 38px; }
+      .hero h2 { font-size: 44px; }
+      .hero p { font-size: 19px; }
+      .section-head { display: block; }
+      .top-header-inner { padding: 12px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-header">
+    <div class="top-header-inner">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div class="brand-text">
+          <strong>Ronen Amos</strong>
+          <span>AI Finance Transformation</span>
+        </div>
+      </div>
+      <a class="header-link" href="https://www.ronenamoscpa.co.il/" target="_blank">לאתר הרשמי ↗</a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-box">
+        <div class="side-kicker">Ronen Amos</div>
+        <h1>פתרונות AI לארגונים ולמחלקות כספים</h1>
+        <p>מגוון מסלולים להרצאות, הכשרות, פיילוטים וליווי מקצועי – בהתאמה לרמת הבשלות, לצוות ולמטרות הארגון.</p>
+      </div>
+
+      <div class="nav-card">
+        <div class="nav-title">ניווט</div>
+        <nav class="nav">
+          <a href="#about"><strong>איך אני עובד</strong><span>מסגור קצר של הגישה</span></a>
+          <a href="#lectures"><strong>הרצאות</strong><span>חשיפה, השראה ויישור קו</span></a>
+          <a href="#training"><strong>הכשרות וסדנאות</strong><span>למידה פרקטית לצוותים</span></a>
+          <a href="#finance"><strong>מחלקות כספים</strong><span>פיילוטים, Use Cases ו-Skills</span></a>
+          <a href="#advisory"><strong>ליווי מקצועי</strong><span>עבודה שוטפת והטמעה</span></a>
+          <a href="#contact"><strong>המשך תהליך</strong><span>איך מתקדמים מכאן</span></a>
+          <a href="#footer"><strong>תוכן נוסף</strong><span>קהילה, קורסים ומשאבים</span></a>
+        </nav>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="top-strip">
+        <div class="top-strip-inner">
+          <div>
+            <div class="series">AI for Finance & Teams</div>
+          </div>
+          <div class="mini-tabs">
+            <div class="mini-tab"><div class="small">01</div><strong>הרצאות</strong></div>
+            <div class="mini-tab active"><div class="small">02</div><strong>הכשרות וימי הדרכה</strong></div>
+            <div class="mini-tab"><div class="small">03</div><strong>ליווי ופיילוטים</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="hero">
+        <div class="eyebrow">AI · Finance · Practical Implementation</div>
+        <h2>AI לארגון שלכם, <span class="accent">בצורה פרקטית ומסודרת</span></h2>
+        <p>אני מלווה הנהלות, צוותים מקצועיים ומחלקות כספים בהבנה, הכשרה והטמעה של AI – מהרצאות וימי חשיפה, דרך סדנאות פרקטיות לצוותים, ועד פיילוטים, Use Cases וליווי מקצועי מתמשך.</p>
+        <ul class="hero-list">
+          <li>העבודה נבנית לפי רמת הבשלות של הארגון והצרכים בפועל.</li>
+          <li>אפשר להתחיל בקטן ולהתקדם בהמשך למסלול עמוק יותר.</li>
+          <li>המיקוד הוא ביישום אמיתי, בשפה פשוטה ובחיבור לעבודה היומיומית.</li>
+        </ul>
+      </section>
+
+      <section id="about" class="section">
+        <div class="section-head">
+          <div>
+            <div class="kicker">גישה</div>
+            <h3>איך אני עובד עם ארגונים</h3>
+          </div>
+          <div class="section-summary">כל ארגון נמצא בנקודה אחרת, ולכן גם הדרך הנכונה להתחיל נראית אחרת.</div>
+        </div>
+        <p class="lead">בחלק מהחברות נכון להתחיל בהרצאה או ביום חשיפה. באחרות נכון יותר לעבור ישר להכשרה לצוות, לפיילוט ממוקד או לליווי למחלקת הכספים.</p>
+        <div class="two-col">
+          <div class="card accent">
+            <h4>עקרונות העבודה</h4>
+            <ul class="points">
+              <li><strong>התאמה לארגון</strong> – לפי רמת הבשלות, הכלים הקיימים והצורך העסקי.</li>
+              <li><strong>שפה פרקטית</strong> – חיבור ישיר לעבודה האמיתית של המשתתפים.</li>
+              <li><strong>תהליך מדורג</strong> – אפשר להתחיל מהרצאה, הכשרה, פיילוט או ליווי.</li>
+              <li><strong>מיקוד בערך</strong> – בחירה בפתרון הנכון לשלב הנוכחי של הארגון.</li>
+            </ul>
+          </div>
+          <div class="card soft">
+            <h4>מסלולי כניסה נפוצים</h4>
+            <div class="steps">
+              <div class="step">הרצאה או יום חשיפה ליצירת יישור קו.</div>
+              <div class="step">סדנה או הכשרה פרקטית לצוותים.</div>
+              <div class="step">פיילוט ממוקד סביב Use Cases נבחרים.</div>
+              <div class="step">ליווי שוטף להטמעה והעמקה.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="lectures" class="section">
+        <div class="section-head">
+          <div>
+            <div class="kicker">1</div>
+            <h3>הרצאות</h3>
+          </div>
+          <div class="section-summary">מתאים לארגונים שרוצים להכיר את העולם, לייצר שיח מקצועי ולהבין מה נכון עבורם להמשך.</div>
+        </div>
+        <p class="lead">הרצאות מאפשרות כניסה מסודרת לעולם ה-AI, עם דגש על הזדמנויות, גבולות, שימושים רלוונטיים וחשיבה נכונה על התחלה.</p>
+        <div class="two-col">
+          <div class="card">
+            <h4>אפשרויות</h4>
+            <ul class="points">
+              <li><strong>הרצאת מבוא ל-AI בארגון</strong> – מושגי יסוד, מגמות, הזדמנויות וחשיבה נכונה על התחלה.</li>
+              <li><strong>הרצאה למחלקות כספים</strong> – דוגמאות שימוש ותהליכים שבהם AI יכול להשתלב.</li>
+              <li><strong>הרצאה ממוקדת כלי</strong> – Claude, Copilot או ChatGPT בהקשר מקצועי.</li>
+              <li><strong>הרצאת הנהלה</strong> – קבלת תמונה ברורה על המשמעויות הניהוליות והארגוניות.</li>
+            </ul>
+          </div>
+          <div class="card soft">
+            <h4>מתאים במיוחד ל</h4>
+            <ul class="points">
+              <li>פורומים ניהוליים וישיבות הנהלה.</li>
+              <li>מחלקות מקצועיות שרוצות יישור קו.</li>
+              <li>אירועי חברה, ימי עיון וכנסים פנימיים.</li>
+              <li>ארגונים שרוצים להבין לפני שנכנסים להכשרה מעשית.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="training" class="section">
+        <div class="section-head">
+          <div>
+            <div class="kicker">2</div>
+            <h3>הכשרות וסדנאות פרקטיות</h3>
+          </div>
+          <div class="section-summary">למידה פרקטית שמטרתה לעזור לצוותים להתחיל לעבוד נכון עם הכלים ולהכניס AI לעבודה השוטפת.</div>
+        </div>
+        <p class="lead">הכשרות וסדנאות נבנות סביב רמת המשתתפים, הכלים הרלוונטיים והשאלות האמיתיות שעולות מתוך העבודה היומיומית.</p>
+        <div class="two-col">
+          <div class="card accent">
+            <h4>מסלולים עיקריים</h4>
+            <ul class="points">
+              <li><strong>קורס בסיס</strong> – Prompt Engineering, עבודה נכונה עם הכלים הקיימים ויצירת בסיס עבודה טוב לצוות.</li>
+              <li><strong>קורס מתקדם</strong> – Skills, Agents, חשיבה תהליכית, ושילוב AI בעבודה מתקדמת יותר.</li>
+              <li><strong>סדנה פרקטית</strong> – תרגול ודוגמאות סביב משימות אמיתיות של הצוות.</li>
+              <li><strong>יום הדרכה מלא</strong> – שילוב של מבוא, הדגמות, תרגול, Use Cases וחשיבה על המשך.</li>
+            </ul>
+          </div>
+          <div class="card soft">
+            <h4>מה מקבלים</h4>
+            <ul class="points">
+              <li>שפה משותפת והבנה טובה יותר של עולם ה-AI.</li>
+              <li>שיפור איכות העבודה עם הכלים הקיימים.</li>
+              <li>הדגמות ודוגמאות שנוגעות לעבודה בפועל.</li>
+              <li>כיוון ברור לאיך ממשיכים מכאן.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="finance" class="section">
+        <div class="section-head">
+          <div>
+            <div class="kicker">3</div>
+            <h3>פתרונות למחלקות כספים</h3>
+          </div>
+          <div class="section-summary">עבודה ממוקדת עם מחלקת הכספים סביב תהליכים, Use Cases, פיילוטים והעמקה לצוותים שרוצים להתקדם מעבר לחשיפה ראשונית.</div>
+        </div>
+        <p class="lead">כאן המיקוד הוא על עבודה פיננסית אמיתית: תהליכים, דוחות, ניתוחים, משימות חוזרות ונקודות שבהן AI יכול לייצר ערך.</p>
+        <div class="grid">
+          <div class="card">
+            <h4>אפשרויות עבודה</h4>
+            <div class="steps">
+              <div class="step"><strong>מיפוי תהליכים וצורך</strong> – הבנה איפה נכון להתחיל ומה יכול לייצר ערך מהיר.</div>
+              <div class="step"><strong>בניית Use Cases</strong> – התאמה לתהליכים כמו סגירת חודש, Reporting, FP&amp;A, בקרה, גבייה וניתוחים.</div>
+              <div class="step"><strong>פיילוט ממוקד</strong> – התחלה מסודרת עם תהליך, צוות או צורך נבחר.</div>
+              <div class="step"><strong>מסלול Skills לצוות</strong> – העמקה שיטתית לעבודה חכמה יותר עם AI.</div>
+            </div>
+          </div>
+          <div class="card soft">
+            <h4>תחומים נפוצים</h4>
+            <ul class="points">
+              <li>סגירת חודש ותהליכי Closing.</li>
+              <li>FP&amp;A, בקרה וניתוחי הנהלה.</li>
+              <li>דוחות, מצגות, סיכומים ותיעוד.</li>
+              <li>איתור Quick Wins והטמעה הדרגתית.</li>
+            </ul>
+            <div class="chips">
+              <div class="chip">Closing</div>
+              <div class="chip">FP&amp;A</div>
+              <div class="chip">Reporting</div>
+              <div class="chip">Controls</div>
+              <div class="chip">Quick Wins</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="advisory" class="section">
+        <div class="section-head">
+          <div>
+            <div class="kicker">4</div>
+            <h3>ליווי מקצועי והטמעה</h3>
+          </div>
+          <div class="section-summary">מתאים לארגונים שרוצים שותף מקצועי לאורך הדרך – לבניית כיוון, ליווי צוותים והפיכת הידע לעבודה שוטפת.</div>
+        </div>
+        <p class="lead">ליווי מתמשך מתאים במיוחד לארגונים שרוצים לא רק ללמוד, אלא גם לייצר תהליך מסודר של בחירה, יישום, סדרי עדיפויות והטמעה.</p>
+        <div class="two-col">
+          <div class="card accent">
+            <h4>אפשרויות ליווי</h4>
+            <ul class="points">
+              <li><strong>ליווי הנהלה או CFO</strong> – חשיבה על אסטרטגיית AI והתקדמות מדורגת.</li>
+              <li><strong>סקירה שוטפת למחלקת הכספים</strong> – בחינת התקדמות, חסמים והזדמנויות להמשך.</li>
+              <li><strong>ליווי הטמעה</strong> – חיבור בין הלמידה לבין העבודה השוטפת בארגון.</li>
+              <li><strong>עבודה לפי צורך</strong> – ייעוץ, מיקוד, התאמות וחשיבה על צעדים הבאים.</li>
+            </ul>
+          </div>
+          <div class="card soft">
+            <h4>מתי זה מתאים</h4>
+            <ul class="points">
+              <li>כשיש רצון להתקדם אבל אין זמן פנימי להוביל את המהלך לבד.</li>
+              <li>כשצריך לחבר בין ראייה ניהולית לבין תהליכי העבודה של הצוות.</li>
+              <li>כשמחפשים תהליך מתמשך ולא פעילות חד-פעמית.</li>
+              <li>כשיש צורך בגורם חיצוני שמסייע לדיוק ולהוצאה לפועל.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="footer-box">
+        <h3>איך מתקדמים מכאן</h3>
+        <p>בשלב הבא אפשר לבחור את הפורמט המתאים ביותר לארגון – הרצאה, יום הדרכה, הכשרה לצוות, פיילוט ממוקד או ליווי מקצועי – ולבנות מסלול מותאם לצורך, לקצב ולמטרות שלכם.</p>
+      </section>
+
+      <section id="footer">
+        <div class="inner">
+          <div class="section-label">המשך</div>
+          <h2 class="footer-title">למדריכים ותוכן נוסף</h2>
+          <p class="footer-sub">כל הכלים, הקהילה והמשאבים — במקום אחד.</p>
+          <div class="footer-grid">
+            <a href="https://chat.whatsapp.com/CS6dgqnK45Q9XAMqScNr6R" target="_blank" class="footer-card">
+              <div class="footer-card-num">01 · COMMUNITY</div>
+              <div class="footer-card-title">קהילת AI Finance</div>
+              <div class="footer-card-desc">מעל 800 אנשי פיננסים שחולקים כלים ו-prompts בזמן אמת.</div>
+              <div class="footer-card-link">chat.whatsapp.com ↗</div>
+            </a>
+            <a href="https://www.youtube.com/@AIFinanceTransformation" target="_blank" class="footer-card">
+              <div class="footer-card-num">02 · YOUTUBE</div>
+              <div class="footer-card-title">AI for Finance</div>
+              <div class="footer-card-desc">הדגמות מעשיות, walkthroughs ו-playbooks שמאחורי הפרקטיקה.</div>
+              <div class="footer-card-link">@AIFinanceTransformation ↗</div>
+            </a>
+            <a href="https://www.ronenamoscpa.co.il/" target="_blank" class="footer-card">
+              <div class="footer-card-num">03 · NEWSLETTER</div>
+              <div class="footer-card-title">הניוזלטר השבועי</div>
+              <div class="footer-card-desc">תובנות AI לפיננסים ישר למייל שלך — כתוב על ידי איש פיננסים.</div>
+              <div class="footer-card-link">ronenamoscpa.co.il ↗</div>
+            </a>
+            <a href="https://www.ronenamoscpa.co.il/skill-vault" target="_blank" class="footer-card">
+              <div class="footer-card-num">04 · PROMPT HUB</div>
+              <div class="footer-card-title">Skill Vault</div>
+              <div class="footer-card-desc">ספריית ה-prompts שלי — מוכנים לשימוש מיידי בצוות הפיננסים שלך.</div>
+              <div class="footer-card-link">ronenamoscpa.co.il/skill-vault ↗</div>
+            </a>
+            <a href="https://www.paypal.com/ncp/payment/E36KBLHK8MDPN" target="_blank" class="footer-card">
+              <div class="footer-card-num">05 · THE BOOK</div>
+              <div class="footer-card-title">Claude Playbook</div>
+              <div class="footer-card-desc">הספר המלא — frameworks, case studies ומדריכי יישום לצוותי פיננסים.</div>
+              <div class="footer-card-link">רכישה מאובטחת ↗</div>
+            </a>
+            <a href="https://www.ronenamoscpa.co.il/courses" target="_blank" class="footer-card">
+              <div class="footer-card-num">06 · COURSE</div>
+              <div class="footer-card-title">קורס AI Finance</div>
+              <div class="footer-card-desc">תוכנית מובנית להטמעת חשיבה AI-First בצוות הפיננסים שלך.</div>
+              <div class="footer-card-link">ronenamoscpa.co.il/courses ↗</div>
+            </a>
+          </div>
+          <div class="footer-copy">
+            Ronen Amos · AI Finance Transformation
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
